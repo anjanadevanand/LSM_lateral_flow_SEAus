@@ -1,0 +1,2 @@
+These create forcing scripts are written in NCL and developed based on the ESMF_regridding_scripts downloded from NCAR for other datasets
+This script incorporates annual/monthly temperature & precip corrections to match AGCD data

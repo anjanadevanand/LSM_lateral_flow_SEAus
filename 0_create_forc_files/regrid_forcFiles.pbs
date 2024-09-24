@@ -1,0 +1,26 @@
+#!/bin/bash
+
+#PBS -P w97
+#PBS -q normal
+#PBS -l walltime=20:00:00
+#PBS -l mem=192GB
+#PBS -l ncpus=1
+#PBS -l storage=gdata/w97+gdata/hh5+gdata/cj37+gdata/zz93
+#PBS -m a
+#PBS -M anjana.devanand@unsw.edu.au
+#PBS -N rg_all
+#PBS -l wd
+
+#####PBS -j oe
+#####PBS -l wd
+
+#for 1-km resolution domain, set mem=128GB. 4km resolution domain mem=48GB
+
+module load ncl/6.6.2
+module load esmf/8.0.1
+
+sub_dir=domain4_10km_monPCorr_monTCorr
+
+cd /g/data/w97/ad9701/WRF-Hydro/ERA5Land_regrid/regional/${sub_dir}/
+
+ncl 'srcFileName="201[3-8]/*era5-land_oper_sfc_*.nc"' 'dstGridName="/g/data/w97/ad9701/WRF-Hydro/SEA/WPS_domain4_10km_newLUonly/geo_em.d01.nc"' /g/data/w97/ad9701/WRF-Hydro/ERA5Land_regrid/regional/${sub_dir}/ERA5Land2WRFHydro_regrid_v3_regional.ncl
