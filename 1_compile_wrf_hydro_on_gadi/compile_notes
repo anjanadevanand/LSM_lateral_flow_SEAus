@@ -1,0 +1,16 @@
+cd wrf_hydro_nwm_public-5.2.0/trunk/NDHMS/
+
+module load intel-compiler/2019.3.199
+module load openmpi/4.0.2
+module load netcdf/4.7.1
+
+export NETCDF=`nc-config --prefix`
+./configure
+
+# select option 3 ifort
+# edit the 'macros' file to include an additional netcdf flag -lnetcdff
+# Last line of macros would now be: NETCDFLIB       =       -L/apps/netcdf/4.7.1/lib -lnetcdf -lnetcdff
+
+./compile_offline_NoahMP.sh setEnvar.sh >& compile_log
+
+
