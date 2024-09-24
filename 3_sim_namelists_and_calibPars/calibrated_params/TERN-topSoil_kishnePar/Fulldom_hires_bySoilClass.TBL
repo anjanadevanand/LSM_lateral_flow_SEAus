@@ -1,0 +1,4 @@
+Fulldom_hires pars to be modified by PEST. File created to interface with PEST. Used to modify nc file Fulldom_hires.nc.
+The code to create the netcdf file is set up to read this file line by line. Deleting these first two lines will break it. Other params can be added in the same format as below
+LKSATFAC
+3,  7.5376828E+01,  6,  2.1437615E+02,  7,  7.7059466E+02,  9,  3.1609570E+02,  12,   3.4356637E+02

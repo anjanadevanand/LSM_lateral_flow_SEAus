@@ -1,0 +1,29 @@
+#!/bin/bash
+#PBS -P w28
+#PBS -l walltime=48:00:00
+#PBS -l mem=760GB
+#PBS -l ncpus=192
+#PBS -j oe
+#PBS -q normal
+#PBS -l wd
+#PBS -l storage=gdata/w97+gdata/hh5+gdata/w28
+#PBS -W umask=0022
+#PBS -N hydro
+
+module use /g/data/hh5/public/modules
+module load intel-compiler/2019.3.199
+module load openmpi/4.0.2
+module load netcdf/4.7.1
+
+#inputDir=../input/
+#echo $inputDir
+
+#cp -rf $inputDir/*.TBL .
+#cp -rf $inputDir/namelist.hrldas .
+#cp -rf $inputDir/hydro.namelist .
+#ln -sf $inputDir/HYDRO_RST.2017-08-01_00:00_DOMAIN1 .
+#ln -sf $inputDir/RESTART.2017080100_DOMAIN1 .
+
+rm ./DOMAIN/hydro2dtbl.nc
+ulimit -s unlimited
+mpirun -np $PBS_NCPUS wrf_hydro.exe
