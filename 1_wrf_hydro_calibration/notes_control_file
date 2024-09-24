@@ -1,0 +1,74 @@
+
+control file is named 'case.pst'
+when pest runs, it generates files with the same case name
+case.rec (the run record file)
+case.par (the best parameter values)
+case.rst (the restart information)
+case.jco (the Jacobian matrix file)
+
+# additional user supplied files
+case.rmf (Parallel PEST run management file)
+case.hld (a parameter hold file)
+
+PEST control file is subdivided into sections, each of which has a section header whose name begins with the “*” character. a space must separate this character from the text which follows it
+
+The sections that may need modification are:
+* control
+Modify the fourth and fifth lines
+Line4:    22(NPAR)    96(NOBS)      22(NPARGP; num.of par grps)      22(NPRIOR)      6(NOBSGP)
+Line5:    3(NTPLFLE; num.of mdl input files)     1(NINSFLE; num.of instr file)       single point   1   0   0
+
+* singular value decomposition
+SVNMODE (always set to 2)
+MAXSING (set equal to or greater than the maximum num of estimable parameters)
+
+* parameter groups
+PARGPNME(par gp name) INCTYP(set to 'relative' in eg) DERINC(indicates incr in par value; 0.02 appropriate for 'relative') DERINCLB(lower bound in incr. can be set to 0) FORCEN(method of diff. for/central; set to 'switch') DERINCMUL(increase par more rapidly, 1-2 satisfactory) DERMTHD(variant of 3-pt derivate, set to 'parabolic' for 'switch') [SPLITTHRESH SPLITRELDIFF SPLITACTION]
+(one such line for each of NPARGP parameter groups)
+
+
+* parameter data
+PARNME(par name) PARTRANS(transformation if any; can also be 'fixed' to eclude the par from the optim.) PARCHGLIM(type of limitation of adj par) PARVAL1(initial value) PARLBND(lower bound) PARUBND(upper bound; both lower & upper ignored for fixed) PARGP(par grp) SCALE OFFSET DERCOM(set to 1)
+(one such line for each of NPAR parameters)
+
+
+* observation groups
+OBGNME(name of obs grp; also includes groups for prior info; 6 in total in eg file) [GTARG] [COVFLE]
+(one such line for each of NOBSGP observation group)
+
+
+* observation data
+OBSNME(obs name, must be unique) OBSVAL(observation value) WEIGHT(weight attached to the residual; zero weight removes obs; negative weight is an error) OBGNME(name of the obs GRP to which the obs is assigned)
+(one such line for each of NOBS observations)
+
+
+* model command line
+COMLINE (the command that PEST must use to run the model)
+can be the name of the executable or the name of a batch or script file containng a complex sequence of steps.
+To calibrate on accumulated streamflow over a 13- or 17- day period, it would be necessary to have a bash script that calls wrf_hydro.exe and then a python script that calculates avg streamflow over the required time slice
+
+
+* model input/output
+TEMPFLE(PEST template file) INFLE(corresponding model input file)
+(one such line for each of NTPLFLE template files)
+INSFLE(PEST instruction file) OUTFLE(output file)
+(one such line for each of NINSLFE instruction files)
+In my case, the INSFLW and OUTFLE would have to be modified to use the mean streamflow over the selected period.
+
+
+* prior information
+If the value of NPRIOR provided in the “control data” section of the PEST control file is not zero, PEST expects NPRIOR articles of prior information. Prior information can be thought of as observations which pertain directly to parameters themselves. Part of calibration data, which together with OBS assist in the estimation of pars.
+
+PILBL(prior information label) PIFAC(a factor) * PARNME(parname) + PIFAC * log(PARNME) ... = PIVAL  WEIGHT(weight of info) OBGNME (obs grp name)
+(one such line for each of the NPRIOR articles of prior information)
+
+# example: giving weight to preferred values of a PAR, as is done in the example control file
+pi1 1.0 * par1 = 2.305 1.0 pr_info
+
+
+
+
+
+
+
+ 

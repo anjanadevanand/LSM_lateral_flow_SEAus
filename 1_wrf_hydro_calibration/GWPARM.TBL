@@ -1,0 +1,8 @@
+GW PARMS. File created to interface with PEST. Used to create nc file GWBUCKPARM.nc. Haven't completed this workflow yet: TO DO if reqd. 
+The code to create the netcdf file is set up to read this file line by line. Adding or deleting lines will break it.
+Coeff
+1.00
+Expon
+3.00
+Zmax
+50.0

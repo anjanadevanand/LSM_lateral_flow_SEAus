@@ -1,0 +1,150 @@
+pcf
+* control data
+restart regularisation
+    18   60      18      16      7
+    4     1       single point   1   0   0
+  10.0   -3.0     0.3  0.03    15 LAMFORGIVE
+  4.0    4.0      0.001  0
+  0.1
+    8  0.01     3     3  0.01     3
+    1     1     1  reisaveitn parsaveitn
+* singular value decomposition
+2
+17 5E-7
+0
+* parameter groups
+mannn1       relative 0.02  0.0  switch  2.0 parabolic
+mannn2       relative 0.02  0.0  switch  2.0 parabolic
+mannn3       relative 0.02  0.0  switch  2.0 parabolic
+mannn4       relative 0.02  0.0  switch  2.0 parabolic
+mannn5       relative 0.02  0.0  switch  2.0 parabolic
+mannn6       relative 0.02  0.0  switch  2.0 parabolic
+mannn7       relative 0.02  0.0  switch  2.0 parabolic
+mannn8       relative 0.02  0.0  switch  2.0 parabolic
+xslope1      relative 0.02  0.0  switch  2.0 parabolic
+refdk        relative 0.02  0.0  switch  2.0 parabolic
+refkdt       relative 0.02  0.0  switch  2.0 parabolic
+ovn1         relative 0.02  0.0  switch  2.0 parabolic
+ovn2         relative 0.02  0.0  switch  2.0 parabolic
+lksatfac3    relative 0.02  0.0  switch  2.0 parabolic
+lksatfac6    relative 0.02  0.0  switch  2.0 parabolic
+lksatfac7    relative 0.02  0.0  switch  2.0 parabolic
+lksatfac9    relative 0.02  0.0  switch  2.0 parabolic
+lksatfac12   relative 0.02  0.0  switch  2.0 parabolic
+* parameter data
+mannn1       none relative   0.550000       0.350          0.60         mannn1          1.0000        0.0000      1
+mannn2       none relative   0.350000       0.150          0.35         mannn2          1.0000        0.0000      1
+mannn3       none relative   0.150000       0.080          0.15         mannn3          1.0000        0.0000      1
+mannn4       none relative   0.100000       0.050          0.15         mannn4          1.0000        0.0000      1
+mannn5       none relative   7.000000E-02   0.020          0.10         mannn5          1.0000        0.0000      1
+mannn6       none relative   5.000000E-02   0.015          0.10         mannn6          1.0000        0.0000      1
+mannn7       fixed relative   4.000000E-02   0.010          0.08         mannn7          1.0000        0.0000      1
+mannn8       fixed relative   3.000000E-02   0.005          0.06         mannn8          1.0000        0.0000      1
+xslope1      none relative   0.100000       1.0e-4         1.00         xslope1         1.0000        0.0000      1
+refdk        log  factor   2.000000E-06   1.0e-8         1.0e-5       refdk           1.0000        0.0000      1
+refkdt       none relative    3.00000       0.01           5.00         refkdt          1.0000        0.0000      1
+ovn1         none relative   0.200000       0.10           0.30         ovn1            1.0000        0.0000      1
+ovn2         none relative   3.500000E-02   0.015          0.06         ovn2            1.0000        0.0000      1
+lksatfac3    log  factor    1000           10            10000         lksatfac3        1.0000        0.0000      1
+lksatfac6    log  factor    1000           10            10000         lksatfac6        1.0000        0.0000      1
+lksatfac7    log  factor    1000           10            10000         lksatfac7        1.0000        0.0000      1
+lksatfac9    log  factor    1000           10            10000         lksatfac9        1.0000        0.0000      1
+lksatfac12   log  factor    1000           10            10000         lksatfac12       1.0000        0.0000      1
+* observation groups
+obsgroup
+regul2
+regul3
+regul4
+regul5
+regul6
+regul7
+* observation data
+o1      3808    1.0     obsgroup
+o2      5124    1.0     obsgroup
+o3      3395    1.0     obsgroup
+o4      3436    1.0     obsgroup
+o5      3048    1.0     obsgroup
+o6      4619    1.0     obsgroup
+o7      3924    1.0     obsgroup
+o8      3408    1.0     obsgroup
+o9      2984    1.0     obsgroup
+o10     2748    1.0     obsgroup
+o11     5587    1.0     obsgroup
+o12     12905   1.0     obsgroup
+o13     8870    1.0     obsgroup
+o14     4953    1.0     obsgroup
+o15     3755    1.0     obsgroup
+o16     1805    1.0     obsgroup
+o17     4909    1.0     obsgroup
+o18     1765    1.0     obsgroup
+o19     9992    1.0     obsgroup
+o20     3814    1.0     obsgroup
+o21     5890    1.0     obsgroup
+o22     2738    1.0     obsgroup
+o23     3586    1.0     obsgroup
+o24     1973    1.0     obsgroup
+o25     1919    1.0     obsgroup
+o26     13035   1.0     obsgroup
+o27     12089   1.0     obsgroup
+o28     3931    1.0     obsgroup
+o29     2066    1.0     obsgroup
+o30     1641    1.0     obsgroup
+o31     3897    1.0     obsgroup
+o32     4524    1.0     obsgroup
+o33     582     1.0     obsgroup
+o34     1450    1.0     obsgroup
+o35     743     1.0     obsgroup
+o36     1229    1.0     obsgroup
+o37     1592    1.0     obsgroup
+o38     7280    0.0     obsgroup
+o39     1004    1.0     obsgroup
+o40     1030    1.0     obsgroup
+o41     8169    1.0     obsgroup
+o42     2686    1.0     obsgroup
+o43     849     1.0     obsgroup
+o44     567     1.0     obsgroup
+o45     475     1.0     obsgroup
+o46     971     1.0     obsgroup
+o47     222     1.0     obsgroup
+o48     134     1.0     obsgroup
+o49     661     1.0     obsgroup
+o50     7121    1.0     obsgroup
+o51     2345    1.0     obsgroup
+o52     578     1.0     obsgroup
+o53     324     1.0     obsgroup
+o54     254     1.0     obsgroup
+o55     2482    1.0     obsgroup
+o56     3610    1.0     obsgroup
+o57     3482    1.0     obsgroup
+o58     600     1.0     obsgroup
+o59     317     1.0     obsgroup
+o60     215     1.0     obsgroup
+* model command line
+bash run_single_wrf.sh
+* model input/output
+CHANPARM.TPL CHANPARM.TBL
+GENPARM.TPL  GENPARM.TBL
+HYDRO.TPL    HYDRO.TBL
+Fulldom_hires_bySoilClass.TPL Fulldom_hires_bySoilClass.TBL
+ML_3daymean_frxst_pts_out.ins ML_3daymean_frxst_pts_out.txt
+* prior information
+mannn1        1.0 * mannn1 =  0.5500000      1.0 regul2
+mannn2        1.0 * mannn2 =  0.3500000      1.0 regul2
+mannn3        1.0 * mannn3 =  0.1500000      1.0 regul2
+mannn4        1.0 * mannn4 =  0.1000000      1.0 regul2
+mannn5        1.0 * mannn5 =  7.0000000E-02  1.0 regul2
+mannn6        1.0 * mannn6 =  5.0000000E-02  1.0 regul2
+xslope1       1.0 * xslope1 =  0.1000000      1.0 regul3
+refdk         1.0 * log(refdk) =  -5.698970      1.0 regul4
+refkdt        1.0 * refkdt =   3.000000      1.0 regul5
+ovn1          1.0 * ovn1 =  0.2000000        1.0 regul6
+ovn2          1.0 * ovn2 =  3.5000000E-02  1.0 regul6
+lksatfac3     1.0 * log(lksatfac3) =  3      1.0 regul7
+lksatfac6     1.0 * log(lksatfac6) =  3      1.0 regul7
+lksatfac7     1.0 * log(lksatfac7) =  3      1.0 regul7
+lksatfac9     1.0 * log(lksatfac9) =  3      1.0 regul7
+lksatfac12    1.0 * log(lksatfac12) =  3      1.0 regul7
+* regularisation
+ 1.0000000E-10  1.0500000E-10  0.1000000    
+ 1.0   1.0e-10    1.0e10
+ 1.3   1.0e-2     1

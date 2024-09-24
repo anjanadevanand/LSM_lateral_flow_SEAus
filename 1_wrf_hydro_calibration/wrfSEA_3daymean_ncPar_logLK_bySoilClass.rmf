@@ -1,0 +1,63 @@
+prf
+10 1 5 -9999
+slave_1     ./test1
+slave_2     ./test2
+slave_3     ./test3
+slave_4     ./test4
+slave_5     ./test5
+slave_6     ./test6
+slave_7     ./test7
+slave_8     ./test8
+slave_9     ./test9
+slave_10     ./test10
+21600 21600 21600 21600 21600 21600 21600 21600 21600 21600
+./test1/CHANPARM.TBL
+./test1/GENPARM.TBL
+./test1/HYDRO.TBL
+./test1/Fulldom_hires_bySoilClass.TBL
+./test1/ML_3daymean_frxst_pts_out.txt
+./test2/CHANPARM.TBL
+./test2/GENPARM.TBL
+./test2/HYDRO.TBL
+./test2/Fulldom_hires_bySoilClass.TBL
+./test2/ML_3daymean_frxst_pts_out.txt
+./test3/CHANPARM.TBL
+./test3/GENPARM.TBL
+./test3/HYDRO.TBL
+./test3/Fulldom_hires_bySoilClass.TBL
+./test3/ML_3daymean_frxst_pts_out.txt
+./test4/CHANPARM.TBL
+./test4/GENPARM.TBL
+./test4/HYDRO.TBL
+./test4/Fulldom_hires_bySoilClass.TBL
+./test4/ML_3daymean_frxst_pts_out.txt
+./test5/CHANPARM.TBL
+./test5/GENPARM.TBL
+./test5/HYDRO.TBL
+./test5/Fulldom_hires_bySoilClass.TBL
+./test5/ML_3daymean_frxst_pts_out.txt
+./test6/CHANPARM.TBL
+./test6/GENPARM.TBL
+./test6/HYDRO.TBL
+./test6/Fulldom_hires_bySoilClass.TBL
+./test6/ML_3daymean_frxst_pts_out.txt
+./test7/CHANPARM.TBL
+./test7/GENPARM.TBL
+./test7/HYDRO.TBL
+./test7/Fulldom_hires_bySoilClass.TBL
+./test7/ML_3daymean_frxst_pts_out.txt
+./test8/CHANPARM.TBL
+./test8/GENPARM.TBL
+./test8/HYDRO.TBL
+./test8/Fulldom_hires_bySoilClass.TBL
+./test8/ML_3daymean_frxst_pts_out.txt
+./test9/CHANPARM.TBL
+./test9/GENPARM.TBL
+./test9/HYDRO.TBL
+./test9/Fulldom_hires_bySoilClass.TBL
+./test9/ML_3daymean_frxst_pts_out.txt
+./test10/CHANPARM.TBL
+./test10/GENPARM.TBL
+./test10/HYDRO.TBL
+./test10/Fulldom_hires_bySoilClass.TBL
+./test10/ML_3daymean_frxst_pts_out.txt

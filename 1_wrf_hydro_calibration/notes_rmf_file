@@ -1,0 +1,12 @@
+prf (identifies that this is a PEST run management file)
+NSLAVE (no. of slaves) IFLETYP (1; the model input/output files are individually named) WAIT (pause in sec in the data exchange process; can increase to avoid sharing violation errors) PARLAM (set to -9999; didn't read significance completely)
+SLAVNAME (name of sl; for identification only) SLAVDIR (working folder)
+(once for each slave)
+(RUNTIME(I), I=1,NSLAVE)
+Any lines after this are required only if IFLETYP is nonzero; the following group of lines is repeated once for each slave.
+INFLE(1)
+INFLE(2)
+(to NTPFLE lines, where NTPFLE is the number of template files)
+OUTFLE(1)
+OUTFLE(2)
+(to NINSFLE lines, where NINSFLE is the number of instruction files) 

@@ -1,0 +1,119 @@
+##########
+# Notes
+##########
+
+##########
+# Running PEST
+#########
+
+0. untar a compiled wrf_hydro directory & rename as desired. This is the folder where pest will be run
+tar -xvf /g/data/w97/ad9701/WRF-Hydro/wrf_hydro_nwm_public-5.2.0_compiled.tar
+Go to the Run directory
+rm *.TBL
+rm *namelist*
+
+1. Inside directory 'PEST_run_scripts', decide the number of agents to use & specify them in the run management file wrfSEA.rmf & in the bash script 1_run_ppest.sh 
+The first line in the 'rmf' file specifies the following:
+NSLAVE (no. of slaves) IFLETYP (1; the model input/output files are individually named) WAIT (pause in sec in the data exchange process; can increase to avoid sharing violation errors) PARLAM (set to -9999; didn't read significance completely)
+
+2. set the appropriate wall times in ppest_slave_template.pbs & ppest_master.pbs
+
+cp -r /g/data/w28/ad9701/WRF-Hydro/SEA/Calibration/PPEST_run_scripts/* .
+To calibrate for an alternate time slice (say, 201606)
+rm -r input
+mv calib201606/* .
+This directory contains files corresponding to this time period 
+
+3. If using Kishne soil parameter values rename those tables as *.TBL
+mv HYDRO_Kishne.TPL HYDRO.TPL
+cd input
+mv HYDRO_MODIS.TBL_Kishne_2017 HYDRO.TBL
+mv SOILPARM.TBL_Kishne_2017 SOILPARM.TBL
+cd ..
+
+3b. If calibrating a 10-km resolution run starting from a based on restart files run using calibrated params at another resolution
+(A)
+rm -r input
+mv input_10km input
+(B) Inside ppest_slave_template.pbs
+Use run_hydro_slave_modSoilClass_fromCalibRst.sh
+
+4. Specify the restart file names in the bash script 'link_domain_and_forc_files.sh' and run it to link the desired RESTART & HYDRO_RST files to the 'DOMAIN' directory in the model run folder (these files depend on the time slice chosen for calibration). The 'link' script also links the routing & forcing files to the appropriate directories.
+(A)
+If calibrating a 10-km run from restart files from a run with no-so-great calib pars: use 'link_domain_and_forc_files_10km.sh'
+
+5. modify the following fields of namelist.hrldas & inside the input/ dir
+START_YEAR
+START_MONTH
+START_DAY
+START_HOUR
+START_MIN
+
+! Specification of the land surface model restart file
+! Comment out the option if not initializing from a restart file
+RESTART_FILENAME_REQUESTED = "RESTART.2017080100_DOMAIN1"
+
+! Specification of simulation length in hours OR days
+! 13-day simulation for calibration
+KHOUR=312
+! 17-day simulation for calibration
+! KHOUR=408
+
+5b. If not using baseflow in the model, use the namelists with no baseflow
+cd input
+cp noGW/* .
+cd ..
+
+6. modify the following fields of hydro.namelist
+RESTART_FILE  = 'HYDRO_RST.2017-08-01_00:00_DOMAIN1'
+
+7. specify the timeslice to be used for calibration in the python script ~/wrf_hydro/calc_mean_streamflow.py. You would need to make a copy of the script for this event if there are other event calib runs in progress that uses the same python script. And also in ~/wrf_hydro/calc_model_streamflow_inML.py (~/wrf_hydro/calc_model_streamflow_3daymean_inML.py) if using the daily (3-day mean) flow for calibration.
+
+8. if you have made a copy of ~/wrf_hydro/calc_mean_streamflow.py, specify the name of the new script in the model run script run_hydro_slave.sh
+
+9. add the observations of the selected event as o1 to o4 (or o1 to oxx) in lines 51 to 54 (appropriate lines) of wrfSEA.pst or wrfSEA_daily.pst or wrfSEA_3daymean_ncPar.pst
+   Use the script calc_obs_streamflow_inML.py (details below) to create the required lines for the .pst and .ins files. 
+   The .ins files would need to be modified if the number of obs changes. In this case the 'NOBS' variable in the .pst file should also be modified
+
+10. Modify the 'ppest_master.pbs' to calibrate on daily flow (run wrfSEA_daily), mean flow (run wrfSEA), or 3-day mean flow (run wrfSEA_3daymean_ncPar) over the period
+
+11. Modify 'run_hydro_slave.sh' according to the parameters selected for calibration. This is the bash script that PEST uses to run the model
+(a) Fulldom_hires.nc: If params inside this file are included in calibration, use the python script to create this file. If not, copy file containing default params from the input directory.
+(b) If LKSATFAC is included in the parameter list, use the appropriate restart files for low values of this parameter
+(c) If channel params & overland flow roughnesses are not included in the parameter list, copy relevant tables containing default values of these parameters from the input directory.
+
+12. Check that the correct run script is called in ppest_slave_template.pbs (run_hydro_slave.sh, or, run_hydro_slave_modSoilClass.sh, run_hydro_slave_modTopo.sh, run_hydro_slave_modSoilClass_fromCalibRst.sh). Specify the required walltimes in ppest_master.pbs & ppest_slave_template.pbs. Submit PEST run using the script ./1_run_ppest.sh
+
+####################################################
+# The calibration timeslice affects the following
+####################################################
+
+- the restart files linked into the 'DOMAIN' directory in link_domain_and_forc_files.sh
+- the names of the restart files, start time & KHOUR in the namelists 
+- the observations (o1 to on) in lines x1 to xn of wrfSEA.pst. These have to be specified as the mean of the observations corresponding to the calibration time slice
+- the observed streamflow to specify in the control file can be calculated using the script ~/wrf_hydro/calc_obs_streamflow_inML.py. The script returns daily & mean observed flow values (in ML) formatted for the pest control and instruction files.
+  Example usage of the script on a gadi linux terminal:
+>  module use /g/data/hh5/public/modules
+>  module load conda/analysis3
+>  python ~/wrf_hydro/calc_obs_streamflow_inML.py 2016-09-01 2016-09-17
+The script saves text files containing the daily streamflow & 3-day mean, and overall mean streamflow during the selected start and end dates (script args) in the 'obs_flow/' directory. The outputs have to be used in the following ways:
+  1. *_ins_file*: There are three files corresponding to the three timescales mentioned above. These files in the format to be used as PEST instruction file. Add a first line 'pif #' and use a PEST ins file. A new instruction file is to be created if the position of the observations in the model output text file changes. 
+  2. *_obs_for_pst_*:  
+- the selected calibration time slice should be specified in the python scripts used to calculate mean streamflow ~/wrf_hydro/calc_mean_streamflow.py, calc_model_streamflow_3daymean_inML.py, calc_model_streamflow_inML.py
+- if there are changes in the number of observations, additionally the following has to be modified:
+  wrfSEA.pst: Line 4 second variable (NOBS)
+  mean_frxst_pts_out.ins: The instruction file to read the correct lines from the model output file
+- if the name of the model output text file changes, the following lines have to be modified
+  wrfSEA.pst: Line 61; the names of the .ins and model output files
+  wrfSEA.rmf: The names of the model output file specified for each agent
+  
+######################################################
+# Changes to select 3 gauges instead of 4 in calibration
+# This is not really relevant as it is a better option to change the weight of the obs at that gauge to zero instead.
+# But I have retained it in case the info is helpful for something else later
+######################################################
+
+1. wrfSEA.pst: Line 4 second variable (NOBS): change to 3 instead of 4
+   wrfSEA.pst: In * observation data: delete the line corresponding to the gauge to be removed
+
+2. Change the WRF-Hydro instruction file: delete the line corresponding to the removed obs & increment the previous line count by 1

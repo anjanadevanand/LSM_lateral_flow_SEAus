@@ -1,0 +1,36 @@
+#!/bin/bash
+#PBS -N tern_defPar
+#PBS -l ncpus=2
+#PBS -l mem=12GB
+#PBS -l walltime=48:00:00
+#PBS -q normalbw
+#PBS -l storage=gdata/w97+gdata/hh5+gdata/w28
+#PBS -W umask=0022
+#PBS -j oe
+
+echo $PATH
+export PATH="$PATH:/home/566/ad9701/bin/"
+
+echo PBS_O_WORKDIR=$PBS_O_WORKDIR
+cd $PBS_O_WORKDIR
+# parallel pest run
+# ppest wrfSEA
+
+# parallel pest run to calibrate 3-day mean flow & including LKSATFAC parameter
+#ppest wrfSEA_3daymean_ncPar_estim /p1
+#ppest wrfSEA_3daymean_sensPar_estim_logLK /p1
+#ppest wrfSEA_3daymean_sensPar_estim_logLK_logKDT /p1
+#ppest wrfSEA_3daymean_ncPar_estim_logLK /p1
+#ppest wrfSEA_3daymean_ncPar_estim_logLK_logKDT /p1
+#ppest wrfSEA_3daymean_ncPar_logLK.pst /p1
+#ppest wrfSEA_3daymean_ncPar.pst /p1
+ppest wrfSEA_3daymean_ncPar_logLK_bySoilClass /p1 
+
+# parallel pest run using all slaves from the beginning
+# ppest wrfSEA /p1
+
+# parallel pest run using all slaves from the beginning to calibrate using daily data
+# ppest wrfSEA_daily /p1
+
+# parallel pest run restarted from the beginning of the iteration where it was interrupted
+# ppest wrfSEA /r

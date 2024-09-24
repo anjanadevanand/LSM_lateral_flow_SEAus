@@ -1,0 +1,34 @@
+#!/bin/bash
+#PBS -N final_run
+#PBS -l ncpus=28
+#PBS -l mem=128GB
+#PBS -l walltime=01:00:00
+#PBS -q normalbw
+#PBS -l storage=gdata/w97+gdata/hh5+gdata/w28
+#PBS -W umask=0022
+#PBS -j oe
+
+module use /g/data/hh5/public/modules
+module load intel-compiler/2019.3.199
+module load openmpi/4.0.2
+module load netcdf/4.7.1
+
+cd $PBS_O_WORKDIR
+cd final_run 
+inputDir=../input/
+#echo $inputDir
+
+# copy inputs; excluding the tables supplied by ppest
+# copy the tables supplied by PPEST to the final_run directory beforehand
+cp -rf $inputDir/namelist.hrldas .
+cp -rf $inputDir/hydro.namelist .
+cp -rf $inputDir/MPTABLE.TBL .
+cp -rf $inputDir/SOILPARM.TBL .
+
+ulimit -s unlimited
+mpirun -np $PBS_NCPUS ../wrf_hydro.exe
+
+# calculate mean streamflow over calib period
+module load conda/analysis3
+python ~/wrf_hydro/calc_mean_streamflow.py
+python ~/wrf_hydro/calc_model_streamflow_inML.py

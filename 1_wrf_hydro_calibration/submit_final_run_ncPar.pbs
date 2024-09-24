@@ -1,0 +1,61 @@
+#!/bin/bash
+#PBS -N final_run
+#PBS -l ncpus=28
+#PBS -l mem=128GB
+#PBS -l walltime=03:00:00
+#PBS -q normalbw
+#PBS -l storage=gdata/w97+gdata/hh5+gdata/w28
+#PBS -W umask=0022
+#PBS -j oe
+
+module use /g/data/hh5/public/modules
+module load intel-compiler/2019.3.199
+module load openmpi/4.0.2
+module load netcdf/4.7.1
+module load conda/analysis3
+
+cd $PBS_O_WORKDIR
+cd final_run 
+inputDir=../input/
+
+# copy inputs; excluding the tables supplied by ppest
+# copy the tables supplied by PPEST to the final_run directory beforehand
+cp -rf $inputDir/namelist.hrldas .
+cp -rf $inputDir/hydro.namelist .
+cp -rf $inputDir/namelist.hrldas.lowLKSATFAC .
+cp -rf $inputDir/hydro.namelist.lowLKSATFAC .
+cp -rf $inputDir/MPTABLE.TBL .
+cp -rf $inputDir/SOILPARM.TBL .
+
+# In a PEST run with all parameters, these tables should not be copied. Otherwise these lines would overwrite the tables supplied by PEST.
+# Uncomment these lines to Copy these tables only for cases: wrfSEA_3daymean_sensPar.pst wrfSEA_3daymean_sensPar_estim.pst 
+cp -rf $inputDir/HYDRO.TBL .
+cp -rf $inputDir/CHANPARM.TBL .
+
+# if not modifying parameters within Fulldom_hires.nc
+# cp -rf ../DOMAIN/Fulldom_hires.nc .
+
+# if modifying any of these pars, use the text file written by PEST to create a modified Fulldom_hires.nc file in the agent's directory
+# This python script reads in the original file from the '../DOMAIN/' directory & writes a new file with perturbed params supplied by PEST
+python ~/wrf_hydro/create_modified_fulldom_hires.py
+
+# if the perturbed LKSATFAC is lower than 150, use restart files from a simulation with LKSATFAC=50 (lowLKSATFAC)
+# Use `bc` to perform the floating-point comparison, and store the result in the `is_greater` variable
+LKSATFAC=$(grep -A1 '^LKSATFAC' Fulldom_hires.TBL | tail -n 1)
+is_low=$(echo "$LKSATFAC < 150" | bc)
+
+if [ "$is_low" -eq 1 ]; then
+  mv namelist.hrldas.lowLKSATFAC namelist.hrldas
+  mv hydro.namelist.lowLKSATFAC hydro.namelist
+else
+  rm namelist.hrldas.lowLKSATFAC
+  rm hydro.namelist.lowLKSATFAC
+fi
+
+ulimit -s unlimited
+mpirun -np $PBS_NCPUS ../wrf_hydro.exe
+
+# calculate mean streamflow over calib period
+python ~/wrf_hydro/calc_mean_streamflow.py
+python ~/wrf_hydro/calc_model_streamflow_inML.py
+python ~/wrf_hydro/calc_model_streamflow_3daymean_inML.py
