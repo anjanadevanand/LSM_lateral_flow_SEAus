@@ -1,0 +1,59 @@
+#!/bin/bash
+ 
+#PBS -P w97
+#PBS -q express
+#PBS -l walltime=00:25:00
+#PBS -l ncpus=4
+#PBS -l mem=4gb
+#PBS -m a
+#PBS -M anjana.devanand@unsw.edu.au
+#PBS -l wd
+#PBS -l storage=gdata/sx70+gdata/w97+gdata/hh5
+#PBS -W umask=0022
+#PBS -N run_geog
+ 
+#set -eu
+
+#*** NOTES
+# This script links new geogrid tables to the WPS/geogrid directory to utilise alternate surface datasets
+# Setting up namelist.wps in the NML_DIR is a prerequisite as this job copies the file from that directory
+# Also keep a WPS directory ready for the run (untar the compiled WPS dircetory file) & specify the path below 
+
+# ------- USER UPDATE NECESSARY
+# To allow running on /scratch with the source code on /home or /g/data
+# we now add the path to the WRF executables to the path.
+# You can either set the WRF_ROOT variable value via the `-v` option
+# for qsub or change the value below within the if statement.
+if [ -z "${WRF_ROOT+x}" ]; then
+    WRF_ROOT=/g/data/w97/ad9701/WRF/WRF
+fi
+# -------------------------------
+ 
+source ${WRF_ROOT}/build.env
+
+#NML_DIR=/g/data/w97/ad9701/WRF-Hydro/SEA/namelists/domain4_1km/
+#WPS_DIR=/g/data/w97/ad9701/WRF-Hydro/SEA/WPS_domain4_1km_newLU_newSoil/ 
+
+NML_DIR=/g/data/w97/ad9701/WRF-Hydro/SEA/namelists/domain4_4km_20110101/
+WPS_DIR=/g/data/w97/ad9701/WRF-Hydro/SEA/WPS_domain4_4km_newLU_newSoil_20110101/
+
+cd $WPS_DIR
+cd geogrid
+unlink GEOGRID.TBL
+# use DLCD landuse classes and the SoilGrids soil data
+ln -s /g/data/w97/ad9701/WRF-Hydro/SEA/namelists/GEOGRID.TBL.ARW.dlcd_250.soilgrids_250 GEOGRID.TBL
+cd ../
+cp $NML_DIR/namelist.wps .
+geogrid.exe
+ 
+#link_grib.csh /g/data/sx70/data/JAN00_v4/fnl_2000012  # this is an example, I used the job script /g/data/w97/ad9701/WRF-Hydro/submit_create_era5grib.sh to directly save the GRIBFILE here
+## Link Vtable
+#ln -sf ungrib/Variable_Tables/Vtable.ERA-interim.pl Vtable
+#ungrib.exe 
+
+#cd metgrid/
+#unlink METGRID.TBL
+#ln -s METGRID.TBL.ERAI METGRID.TBL
+#cd ..
+#metgrid.exe
+ 

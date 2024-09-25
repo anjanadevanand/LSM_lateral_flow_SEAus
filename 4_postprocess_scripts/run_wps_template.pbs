@@ -1,0 +1,43 @@
+#!/bin/bash
+ 
+#PBS -P w97
+#PBS -q express
+#PBS -l walltime=00:25:00
+#PBS -l ncpus=4
+#PBS -l mem=4gb
+#PBS -m a
+#PBS -M anjana.devanand@unsw.edu.au
+#PBS -l wd
+#PBS -l storage=gdata/sx70+gdata/w97+gdata/hh5
+#PBS -W umask=0022
+#PBS -N run_metgrid
+ 
+#set -eu
+ 
+# ------- USER UPDATE NECESSARY
+# To allow running on /scratch with the source code on /home or /g/data
+# we now add the path to the WRF executables to the path.
+# You can either set the WRF_ROOT variable value via the `-v` option
+# for qsub or change the value below within the if statement.
+if [ -z "${WRF_ROOT+x}" ]; then
+    WRF_ROOT=/g/data/w97/ad9701/WRF/WRF
+fi
+# -------------------------------
+ 
+source ${WRF_ROOT}/build.env
+
+WPS_DIR=/path-to-dir/ 
+cd $WPS_DIR
+#geogrid.exe #already run to create routing files
+ 
+#link_grib.csh /g/data/sx70/data/JAN00_v4/fnl_2000012  # this is an example, I used the job script /g/data/w97/ad9701/WRF-Hydro/submit_create_era5grib.sh to directly save the GRIBFILE here
+## Link Vtable
+ln -sf ungrib/Variable_Tables/Vtable.ERA-interim.pl Vtable
+ungrib.exe 
+
+cd metgrid/
+unlink METGRID.TBL
+ln -s METGRID.TBL.ERAI METGRID.TBL
+cd ..
+metgrid.exe
+ 

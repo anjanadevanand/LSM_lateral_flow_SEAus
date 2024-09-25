@@ -1,0 +1,25 @@
+#!/bin/bash
+
+#PBS -P w97
+#PBS -q normalbw
+#PBS -l walltime=00:30:00
+#PBS -l jobfs=50gb
+#PBS -l mem=128GB
+#PBS -l ncpus=1
+#PBS -l storage=gdata/w97+gdata/hh5+gdata/cj37+gdata/zz93
+#PBS -m a
+#PBS -M anjana.devanand@unsw.edu.au
+#PBS -N regrid_genWghts
+#PBS -l wd
+
+#####PBS -j oe
+#####PBS -l wd
+
+module load ncl/6.6.2
+module load esmf/8.0.1
+
+cd REGRID_DIR
+ncl 'interp_opt="bilinear"' 'srcGridName="/g/data/zz93/era5-land/reanalysis/2t/2016/2t_era5-land_oper_sfc_20160101-20160131.nc"' 'dstGridName="WPS_DIR/geo_em.d01.nc"' REGRID_DIR/ERA5Land2WRFHydro_generate_weights_regional.ncl
+
+ncl 'interp_opt="bilinear"' 'srcGridName="/g/data/w97/ad9701/WRF-Hydro/ERA5Land_regrid/annual_precip_forCorr/agcd_2010.nc"' 'dstGridName="WPS_DIR/geo_em.d01.nc"' REGRID_DIR/AGCD2WRFHydro_generate_weights_regional.ncl
+

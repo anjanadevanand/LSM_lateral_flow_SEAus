@@ -1,0 +1,26 @@
+#!/bin/bash
+
+#PBS -P w97
+#PBS -q normalsr
+#PBS -l walltime=03:00:00
+#PBS -l mem=500GB
+#PBS -l ncpus=1
+#PBS -l storage=gdata/w97+gdata/hh5+gdata/w28+scratch/w97
+#PBS -m a
+#PBS -M anjana.devanand@unsw.edu.au
+#PBS -N daily_calc
+#PBS -l wd
+
+#####PBS -j oe
+#####PBS -l wd
+
+# walltime for all land grids = 45:00:00
+# also removed jobfs PBS -l jobfs=50gb
+
+module use /g/data/hh5/public/modules
+module load conda/analysis3
+
+export WRF_HYDRO_DIR=/g/data/w97/ad9701/WRF-Hydro/SEA/noGW_runs/runs_wCalibPars_1km/wrf_hydro_nwm_public-5.2.0_domain4_1km_monPnTCorr_LSMonly_defSoil_defPar/trunk/NDHMS/Run/
+export varname=ETRAN
+
+python ./calc_daily_mean.py

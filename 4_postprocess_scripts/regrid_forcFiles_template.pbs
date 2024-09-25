@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#PBS -P w97
+#PBS -q normalbw
+#PBS -l walltime=14:00:00
+#PBS -l mem=128GB
+#PBS -l ncpus=1
+#PBS -l storage=gdata/w97+gdata/hh5+gdata/cj37+gdata/zz93
+#PBS -m a
+#PBS -M anjana.devanand@unsw.edu.au
+#PBS -N regrid_era5land
+#PBS -l wd
+
+#####PBS -j oe
+#####PBS -l wd
+
+#for 1-km resolution domain, set mem=128GB. 4km resolution domain mem=48GB
+
+module load ncl/6.6.2
+module load esmf/8.0.1
+
+cd REGRID_DIR
+ncl 'srcFileName="SIM_YEARS/*era5-land_oper_sfc_*.nc"' 'dstGridName="WPS_DIR/geo_em.d01.nc"' REGRID_DIR/ERA5Land2WRFHydro_regrid_v3_regional.ncl
+
+#for testing using one month of data
+#ncl 'srcFileName="SIM_YEARS/*era5-land_oper_sfc_*0131.nc"' 'dstGridName="WPS_DIR/geo_em.d01.nc"' REGRID_DIR/ERA5Land2WRFHydro_regrid_v3_regional.ncl
+
+# ncl 'srcFileName="201[5-7]/*era5-land_oper_sfc_*.nc"' 'dstGridName="/g/data/w97/ad9701/WRF-Hydro/SEA/WPS_domain3_4km/geo_em.d01.nc"' /g/data/w97/ad9701/WRF-Hydro/ERA5Land_regrid/regional/ERA5Land2WRFHydro_regrid_v3_regional.ncl

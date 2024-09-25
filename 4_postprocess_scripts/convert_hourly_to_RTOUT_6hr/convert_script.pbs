@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#PBS -P w97
+#PBS -q normalbw
+#PBS -l walltime=03:00:00
+#PBS -l mem=48GB
+#PBS -l ncpus=1
+#PBS -l storage=gdata/w97+gdata/hh5+gdata/w28+scratch/w97+scratch/w28
+#PBS -m a
+#PBS -M anjana.devanand@unsw.edu.au
+#PBS -N hrly_to_6hr
+#PBS -l wd
+
+# used 16GB mem & 2 hr walltime for 250m RT outputs
+
+module use /g/data/hh5/public/modules
+module load conda/analysis3
+
+export WRF_HYDRO_DIR=/g/data/w97/ad9701/WRF-Hydro/SEA/noGW_runs/runs_wCalibPars_4km/wrf_hydro_nwm_public-5.2.0_domain4_4km_t80_RTCHon_12g_monPnTCorr_defSoil_defPar/trunk/NDHMS/Run/
+export year=2017
+export mon=12
+
+python ~/wrf_hydro/convert_hourly_data_to_6hourly.py

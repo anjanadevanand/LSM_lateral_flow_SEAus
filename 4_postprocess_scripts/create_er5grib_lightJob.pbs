@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+#PBS -P w97
+#PBS -q express
+#PBS -l walltime=01:00:00
+#PBS -l ncpus=1
+#PBS -l mem=32GB
+#PBS -l jobfs=4GB
+#PBS -l storage=gdata/hh5+gdata/sx70+gdata/rt52+gdata/w97+gdata/w28+gdata/zz93
+#PBS -j oe
+#PBS -l wd
+#PBS -m ae
+#PBS -N era5grib
+
+# This job script requests less resources based on a test run; may increase memory & jobfs later if required
+
+module purge
+module use /g/data/hh5/public/modules
+module load conda/analysis3-22.07  
+# I found that the unstable conda environment has to be loaded because the era5grib package has been updated to resolve an error (refer to GitHub issues page for details)
+
+WPS_DIR=/g/data/w97/ad9701/WRF-Hydro/SEA/WPS_domain4_10km_newLUonly/
+
+cd $WPS_DIR
+era5grib wrf --namelist $WPS_DIR/namelist.wps --geo $WPS_DIR/geo_em.d01.nc --output GRIBFILE.AAA
+
+#era5grib wrf --namelist $WPS_dir/namelist.wps_allInfo --output GRIBFILE.AAA
+#era5grib wrf --namelist /g/data/w97/ad9701/WRF-Hydro/SEA/WPS_meng/namelist.wps --geo /g/data/w97/ad9701/WRF-Hydro/SEA/WPS_meng/geo_em.d01.nc 

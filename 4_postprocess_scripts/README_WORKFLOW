@@ -1,0 +1,25 @@
+*** The steps to create namelists & the routing stack **** 
+
+1. Create the domain namelist settings using the WRF domain wizard software and create 'namelist.wps'
+
+2. Use 'namelist.wps' to run geogrid.exe and generate the geo_em.d01.nc file by submitting the 'run_geogrid.pbs' script in this directory
+Note that the WPS run uses the DLCD land cover data and the default soil dataset
+
+3. Create the routing stack using the ArcGIS Preprocessing Toolbox on a windows machine. Copy and unzip the zip file on Gadi.
+
+5. Create 'namelist.input' for the domain & dates (This will used to run real.exe). Also create the two WRF-Hydro namelists with desired simulation settings : namelist.hrldas and hydro.namelist.
+
+*** The steps for a simulation ***
+
+6. Select the years for simulation and create ERA5 grib files for input to real.exe. The namelist.wps should be updated to include the starting date of the simulation for use with era5grib package 
+Note: The era5grib python package is available in coda envt. and the job script is loading and using it. No need to install the package.
+
+7. Run ungrib and metgrid programs in WPS for the selected start date
+
+8. Use the metrgrid files and 'namelist.input' to run real and generate wrfinput_d01 nc file
+
+9. Use the geo_em.d01 file and information of the dates to create ERA5land forcing files for the standalone simulation using the ESMF regridding scripts (../1_create_forc_files/)
+
+10. Use the routing stack, wrfinput_d01, namelist.hrldas, hydro.namelist and ERA5Land forcing files to run the WRF-hydro simulation with required routing settings
+
+11. Use the postprocessing scripts (README_POSTPROCESS) to concatenate files and variables for analyses.

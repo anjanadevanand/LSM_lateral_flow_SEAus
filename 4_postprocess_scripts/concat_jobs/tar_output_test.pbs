@@ -1,0 +1,56 @@
+#!/bin/bash
+
+#PBS -P w97
+#PBS -q normalbw
+#PBS -l walltime=08:00:00
+#PBS -l jobfs=50gb
+#PBS -l mem=64GB
+#PBS -l ncpus=1
+#PBS -l storage=gdata/w97+gdata/hh5+gdata/cj37+gdata/zz93+gdata/w28
+#PBS -m a
+#PBS -M anjana.devanand@unsw.edu.au
+#PBS -N tar1
+#PBS -l wd
+
+#####PBS -j oe
+#####PBS -l wd
+
+RUN_NAME=wrf_hydro_nwm_public-5.2.0_domain4_4km_t80_RTon
+
+HYDRO_DIR=/g/data/w97/ad9701/WRF-Hydro/SEA/$RUN_NAME/trunk/NDHMS/Run/
+TAR_DIR=/g/data/w28/ad9701/WRF-Hydro/SEA/$RUN_NAME/
+
+if [ ! -d "$TAR_DIR" ] ; then
+mkdir "$TAR_DIR"
+fi
+
+cd $TAR_DIR
+
+tar -czvf orig_LDASOUT.tar.gz $HYDRO_DIR/OUTPUT/*.LDASOUT_DOMAIN1
+echo $HYDRO_DIR/OUTPUT/*.LDASOUT_DOMAIN1
+#rm $HYDRO_DIR/OUTPUT/*.LDASOUT_DOMAIN1
+
+cd ..
+if compgen -G "$HYDRO_DIR*.LSMOUT_DOMAIN1" > /dev/null; then     
+tar -czvf orig_LSMOUT.tar.gz $HYDRO_DIR*.LSMOUT_DOMAIN1
+echo $HYDRO_DIR*.LSMOUT_DOMAIN1
+#rm $HYDRO_DIR*.LSMOUT_DOMAIN1
+fi
+
+if compgen -G "$HYDRO_DIR*.RTOUT_DOMAIN1" > /dev/null; then         
+tar -czvf orig_RTOUT.tar.gz $HYDRO_DIR*.RTOUT_DOMAIN1
+echo $HYDRO_DIR*.RTOUT_DOMAIN1
+#rm $HYDRO_DIR*.RTOUT_DOMAIN1
+fi
+
+if compgen -G "$HYDRO_DIR*.GWOUT_DOMAIN1" > /dev/null; then   
+tar -czvf orig_GWOUT.tar.gz $HYDRO_DIR*.GWOUT_DOMAIN1
+echo $HYDRO_DIR*.GWOUT_DOMAIN1
+#rm $HYDRO_DIR*.GWOUT_DOMAIN1
+fi
+
+if compgen -G "$HYDRO_DIR*CHRTOUT_DOMAIN1" > /dev/null; then
+tar -czvf orig_CHRTOUT.tar.gz $HYDRO_DIR*.CHRTOUT_DOMAIN1
+echo $HYDRO_DIR*.CHRTOUT_DOMAIN1
+#rm $HYDRO_DIR*.CHRTOUT_DOMAIN1
+fi

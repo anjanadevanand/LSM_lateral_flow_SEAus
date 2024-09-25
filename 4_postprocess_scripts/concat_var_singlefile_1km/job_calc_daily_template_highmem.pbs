@@ -1,0 +1,26 @@
+#!/bin/bash
+
+#PBS -P w28
+#PBS -q normal
+#PBS -l walltime=01:00:00
+#PBS -l mem=190GB
+#PBS -l ncpus=1
+#PBS -l storage=gdata/w97+gdata/hh5+gdata/w28+scratch/w97
+#PBS -m a
+#PBS -M anjana.devanand@unsw.edu.au
+#PBS -N daily_calc
+#PBS -l wd
+
+#####PBS -j oe
+#####PBS -l wd
+
+# walltime for all land grids = 45:00:00
+# also removed jobfs PBS -l jobfs=50gb
+
+module use /g/data/hh5/public/modules
+module load conda/analysis3
+
+export WRF_HYDRO_DIR
+export varname
+
+python ./calc_daily_mean.py

@@ -1,0 +1,8 @@
+concat_jobs/*:   
+Used to concatenate sub-daily files to daily files. The daily files are placed inside 'DAILY_FILES' subdir of the "OUTPUT' dir inside the WRF-Hydro 'Run' folder
+
+concat_var_singlefile/*
+concat_var_singlefile_1km/*
+Used to extract a single variables from the daily files inside 'DAILY_FILES' and save it in a file named '<var>*concatTime.nc'. Also calc. daily mean for relevant variables and save them in netcdf files named '<var>*_daily_mean.nc'.
+
+
