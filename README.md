@@ -1,4 +1,4 @@
-## Scripts to perform WRF-Hydro simulations & analyse the impact of lateral flow
+### Scripts to perform WRF-Hydro simulations & analyse the impact of lateral flow
 
 #### 0_compile_wrf_hydro_on_gadi/
 Notes to compile the WRF-Hydro model on NCI Gadi.  
@@ -14,3 +14,8 @@ Also bash scripts to set up the parallel PEST run.
 Calibrated parameters and namelists used for the simulations.
 Also contains the bash and job scripts used to set up the WRF-Hydro runs.
 
+#### 4_postprocess_scripts/
+Bash and job scripts used to postprocess the WRF-hydro output files for analyses.
+
+#### 5_analyses_scripts/
+Python code used to analyse the results of the simulations and compare simulations with observations.
