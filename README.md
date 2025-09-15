@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/630313355.svg)](https://doi.org/10.5281/zenodo.17118203)
+
 ### Scripts to perform WRF-Hydro simulations & analyse the impact of lateral flow
 
 #### 0_compile_wrf_hydro_on_gadi/
